@@ -1,0 +1,64 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Hold : MonoBehaviour
+{
+    private Rigidbody rb;
+    public static bool held = false;
+    public bool meHeld = false;
+    public Transform Hand;
+    public float speed = 5;
+    private BoxCollider bc;
+    public Transform cam;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        bc = GetComponent<BoxCollider>();
+    }
+    private void Grab()
+    {
+        if (held == false)
+        {
+            held = true;
+            meHeld = true;
+            rb.isKinematic = true;
+            bc.enabled = false;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (meHeld == true)
+        {
+            transform.position = Vector3.Lerp(Hand.position, transform.position, 0.7f);
+            transform.rotation = Quaternion.Lerp(Hand.rotation, transform.rotation, 0.9f);
+        }
+
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(cam.position, cam.forward, out hit, 4))
+            {
+                if (hit.transform.gameObject == gameObject)
+                {
+                    Grab();
+                }
+            }
+        }
+
+        if (meHeld == true && Input.GetKeyDown(KeyCode.Q))
+        {
+            held = false;
+            meHeld = false;
+            rb.isKinematic = false;
+            rb.AddRelativeForce(0, 0, speed, ForceMode.Impulse);
+            bc.enabled = true;
+        }
+    }
+}
