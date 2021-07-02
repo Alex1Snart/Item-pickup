@@ -9,13 +9,13 @@ public class Hold : MonoBehaviour
     public bool meHeld = false;
     public Transform Hand;
     public float speed = 5;
-    private BoxCollider bc;
+    private Collider bc;
     public Transform cam;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        bc = GetComponent<BoxCollider>();
+        bc = GetComponent<Collider>();
     }
     private void Grab()
     {
